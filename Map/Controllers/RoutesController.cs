@@ -87,15 +87,9 @@ namespace Map.Controllers
         public async Task<ActionResult<Route>> PostRoute(string start, string end, int length)
         {
             var startTown = _context.Towns.Where(t => start == t.Name).FirstOrDefault();
-
-            if (startTown == null)
-            {
-                return NotFound();
-            }
-
             var endTown = _context.Towns.Where(t => end == t.Name).FirstOrDefault();
 
-            if (endTown == null)
+            if (startTown == null || endTown == null)
             {
                 return NotFound();
             }
@@ -116,6 +110,7 @@ namespace Map.Controllers
         public async Task<IActionResult> DeleteRoute(int id)
         {
             var route = await _context.Routes.FindAsync(id);
+
             if (route == null)
             {
                 return NotFound();
