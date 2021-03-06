@@ -24,7 +24,7 @@ export const Routes = () => {
       await axios.post(`https://localhost:44321/api/Routes/${values.Start}/${values.End}/${Number(values.Length)}`);
       axios.get('https://localhost:44321/api/Routes').then(response => setRoutes(response.data));
       resetForm({});
-    }icak ne struvash
+    }
   }
 
   const handleDelete = async (id) => {
