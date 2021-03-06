@@ -23,9 +23,18 @@ namespace Map.Controllers
 
         // GET: api/Routes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Route>>> GetRoutes()
+        public async Task<ActionResult<IEnumerable<GetRoutesDTO>>> GetRoutes()
         {
-            return await _context.Routes.ToListAsync();
+            var result = await _context.Routes.Select(x => new GetRoutesDTO
+            { 
+                StartId = x.Start.Id,
+                Start = x.Start.Name,
+                EndId = x.End.Id,
+                End = x.End.Name,
+                Length = x.Length    
+            }).ToListAsync();
+
+            return result;
         }
 
         // GET: api/Routes/5
@@ -75,9 +84,28 @@ namespace Map.Controllers
 
         // POST: api/Routes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Route>> PostRoute(Route route)
+        [HttpPost("{start}/{end}/{length}")]
+        public async Task<ActionResult<Route>> PostRoute(string start, string end, int length)
         {
+            var startTown = _context.Towns.Where(t => start == t.Name).FirstOrDefault();
+
+            if (startTown == null)
+            {
+                return NotFound();
+            }
+
+            var endTown = _context.Towns.Where(t => end == t.Name).FirstOrDefault();
+
+            if (endTown == null)
+            {
+                return NotFound();
+            }
+
+            Route route = new Route();
+            route.Start = startTown;
+            route.End = endTown;
+            route.Length = length;
+
             _context.Routes.Add(route);
             await _context.SaveChangesAsync();
 

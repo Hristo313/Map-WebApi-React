@@ -17,7 +17,7 @@ export const Routes = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     if (values.Start !== 'Select Start Point' && values.End !== 'Select Start Point') {
-      await axios.post('https://localhost:44321/api/Routes', { Start: values.Start, End: values.End, Length: values.Length });
+      await axios.post(`https://localhost:44321/api/Routes/${values.Start}/${values.End}/${Number(values.Length)}`);
       axios.get('https://localhost:44321/api/Routes').then(response => setRoutes(response.data));
     }
   }
@@ -50,7 +50,7 @@ export const Routes = () => {
         )}
       </Formik>
       <ul>
-        {routes && routes.map(r => <li key={r.id}>{r.start}-{r.end}: {r.lenght}</li>)}
+        {routes && routes.map(r => <li key={r.id}>{r.start}-{r.end}: {r.length}</li>)}
       </ul>
     </div>
   )
