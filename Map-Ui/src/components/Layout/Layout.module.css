@@ -1,0 +1,24 @@
+.nav ul {
+  list-style: none;
+}
+
+.nav ul li {
+  display: inline;
+  margin-right: 12px;
+  padding-right: 12px;
+  border-right: 2px solid #566e3d;
+}
+
+.nav ul li:last-child {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}

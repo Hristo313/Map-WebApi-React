@@ -1,0 +1,12 @@
+.Towns form {
+  display: flex;
+  flex-direction: row;
+}
+
+.Towns form label {
+  margin-right: 12px;
+}
+
+.Towns form button {
+  margin-left: 12px;
+}
