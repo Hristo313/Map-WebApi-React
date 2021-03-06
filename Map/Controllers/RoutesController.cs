@@ -27,9 +27,8 @@ namespace Map.Controllers
         {
             var result = await _context.Routes.Select(x => new GetRoutesDTO
             { 
-                StartId = x.Start.Id,
+                Id = x.Id,
                 Start = x.Start.Name,
-                EndId = x.End.Id,
                 End = x.End.Name,
                 Length = x.Length    
             }).ToListAsync();

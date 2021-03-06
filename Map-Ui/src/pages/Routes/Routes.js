@@ -16,11 +16,21 @@ export const Routes = () => {
   }, [setTowns, setRoutes]);
 
   const handleSubmit = async (values, { resetForm }) => {
+    if (routes.filter(r => (r.start === values.Start && r.end === values.End) || (r.start === values.End && r.end === values.Start)).length !== 0) {
+      return;
+    }
+
     if (values.Start !== 'Select Start Point' && values.End !== 'Select Start Point') {
       await axios.post(`https://localhost:44321/api/Routes/${values.Start}/${values.End}/${Number(values.Length)}`);
       axios.get('https://localhost:44321/api/Routes').then(response => setRoutes(response.data));
-    }
+      resetForm({});
+    }icak ne struvash
   }
+
+  const handleDelete = async (id) => {
+    await axios.delete(`https://localhost:44321/api/Routes/${id}`);
+    axios.get('https://localhost:44321/api/Routes').then(response => setRoutes(response.data));
+  } 
 
   return (
     <div>
@@ -50,7 +60,7 @@ export const Routes = () => {
         )}
       </Formik>
       <ul>
-        {routes && routes.map(r => <li key={r.id}>{r.start}-{r.end}: {r.length}</li>)}
+        {routes && routes.map(r => <li key={r.id}>{r.start}-{r.end}: {r.length} <button onClick={() => handleDelete(r.id)}>del</button></li>)}
       </ul>
     </div>
   )
