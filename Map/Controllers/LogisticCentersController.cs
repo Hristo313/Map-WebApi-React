@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Map.Data;
 using Map.Models;
+using Map.DTO;
 
 namespace Map.Controllers
 {
@@ -76,12 +77,20 @@ namespace Map.Controllers
         // POST: api/LogisticCenters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LogisticCenter>> PostLogisticCenter(LogisticCenter logisticCenter)
+        public async Task<ActionResult<LogisticCenter>> PostLogisticCenter([FromForm]GetTownsDTO[] towns)
         {
-            _context.LogisticCenters.Add(logisticCenter);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);
+
+            foreach (var t in towns)
+            {
+                Console.WriteLine(t.Name);
+            }
+
+            return null;
+            //_context.LogisticCenters.Add(logisticCenter);
+            //await _context.SaveChangesAsync();
+
+            //return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);
         }
 
         // DELETE: api/LogisticCenters/5
