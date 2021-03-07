@@ -3,6 +3,7 @@ using Map.DTO;
 using Map.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Map.Services
 {
@@ -22,7 +23,11 @@ namespace Map.Services
 
         public ICollection<Route> FindRoutes(GetTownsDTO towns)
         {
-            return _context.Routes.Where(r => towns.Towns.Any(t => t.Name == r.Start.Name || t.Name == r.End.Name)).ToList();
+            var currentRoutes = _context.Routes
+                .Where(r => towns.Towns.Any(t => t.Name == r.Start.Name || t.Name == r.End.Name))
+                .ToList();
+
+            return currentRoutes;
         }
 
         public Region MakeRegion(GetTownsDTO towns, ICollection<Route> routes)
@@ -44,6 +49,12 @@ namespace Map.Services
             }
 
             region.Routes = routesCollection;
+
+            if (_context.Regions.Contains(region))
+            {
+                return null;
+            }
+
             _context.Regions.Add(region);
             _context.SaveChanges();
 

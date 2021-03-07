@@ -86,6 +86,11 @@ namespace Map.Controllers
 
             var region = this.logisticCenterService.MakeRegion(towns, routes);
 
+            if (region == null)
+            {
+                throw new InvalidOperationException("You already have this logistic center!");
+            }
+
             var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
 
             _context.LogisticCenters.Add(logisticCenter);
