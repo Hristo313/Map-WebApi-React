@@ -82,17 +82,9 @@ namespace Map.Controllers
         [HttpPost]
         public async Task<ActionResult<GetTownsDTO>> PostLogisticCenter(GetTownsDTO towns)
         {
-            var region = new Region();
-            var townCollection = new List<Town>();
+            var routes = this.logisticCenterService.FindRoutes(towns);
 
-            foreach (var town in towns.Towns)
-            {
-                townCollection.Add(_context.Towns.Where(t => t.Name == town.Name).FirstOrDefault());
-            }
-
-            region.Towns = townCollection;
-
-            //TODO region.Add(routes)!
+            var region = this.logisticCenterService.MakeRegion(towns, routes);
 
             var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
 

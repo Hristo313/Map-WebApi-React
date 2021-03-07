@@ -23,9 +23,9 @@ namespace Map.Controllers
 
         // GET: api/Routes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetRoutesDTO>>> GetRoutes()
+        public async Task<ActionResult<IEnumerable<RouteDTO>>> GetRoutes()
         {
-            var result = await _context.Routes.Select(x => new GetRoutesDTO
+            var result = await _context.Routes.Select(x => new RouteDTO
             { 
                 Id = x.Id,
                 Start = x.Start.Name,

@@ -35,6 +35,18 @@ namespace Map.Migrations
                     b.ToTable("LogisticCenters");
                 });
 
+            modelBuilder.Entity("Map.Models.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Regions");
+                });
+
             modelBuilder.Entity("Map.Models.Route", b =>
                 {
                     b.Property<int>("Id")
@@ -48,12 +60,17 @@ namespace Map.Migrations
                     b.Property<int>("Length")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RegionId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("StartId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EndId");
+
+                    b.HasIndex("RegionId");
 
                     b.HasIndex("StartId");
 
@@ -71,7 +88,12 @@ namespace Map.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RegionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Towns");
                 });
@@ -82,6 +104,10 @@ namespace Map.Migrations
                         .WithMany()
                         .HasForeignKey("EndId");
 
+                    b.HasOne("Map.Models.Region", null)
+                        .WithMany("Routes")
+                        .HasForeignKey("RegionId");
+
                     b.HasOne("Map.Models.Town", "Start")
                         .WithMany()
                         .HasForeignKey("StartId");
@@ -89,6 +115,20 @@ namespace Map.Migrations
                     b.Navigation("End");
 
                     b.Navigation("Start");
+                });
+
+            modelBuilder.Entity("Map.Models.Town", b =>
+                {
+                    b.HasOne("Map.Models.Region", null)
+                        .WithMany("Towns")
+                        .HasForeignKey("RegionId");
+                });
+
+            modelBuilder.Entity("Map.Models.Region", b =>
+                {
+                    b.Navigation("Routes");
+
+                    b.Navigation("Towns");
                 });
 #pragma warning restore 612, 618
         }

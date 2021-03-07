@@ -16,6 +16,8 @@ namespace Map.Data
 
         public DbSet<LogisticCenter> LogisticCenters { get; set; }
 
+        public DbSet<Region> Regions { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
