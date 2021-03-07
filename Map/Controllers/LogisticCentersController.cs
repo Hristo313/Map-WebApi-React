@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Map.Data;
 using Map.Models;
 using Map.DTO;
+using Map.Services;
 
 namespace Map.Controllers
 {
@@ -16,10 +17,12 @@ namespace Map.Controllers
     public class LogisticCentersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogisticCenterService logisticCenterService;
 
-        public LogisticCentersController(ApplicationDbContext context)
+        public LogisticCentersController(ApplicationDbContext context, ILogisticCenterService logisticCenterService)
         {
             _context = context;
+            this.logisticCenterService = logisticCenterService;
         }
 
         // GET: api/LogisticCenters
@@ -77,20 +80,26 @@ namespace Map.Controllers
         // POST: api/LogisticCenters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LogisticCenter>> PostLogisticCenter([FromForm]GetTownsDTO[] towns)
+        public async Task<ActionResult<GetTownsDTO>> PostLogisticCenter(GetTownsDTO towns)
         {
+            var region = new Region();
+            var townCollection = new List<Town>();
 
-
-            foreach (var t in towns)
+            foreach (var town in towns.Towns)
             {
-                Console.WriteLine(t.Name);
+                townCollection.Add(_context.Towns.Where(t => t.Name == town.Name).FirstOrDefault());
             }
 
-            return null;
-            //_context.LogisticCenters.Add(logisticCenter);
-            //await _context.SaveChangesAsync();
+            region.Towns = townCollection;
 
-            //return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);
+            //TODO region.Add(routes)!
+
+            var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
+
+            _context.LogisticCenters.Add(logisticCenter);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);
         }
 
         // DELETE: api/LogisticCenters/5

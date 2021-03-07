@@ -4,6 +4,6 @@ namespace Map.Services
 {
     public interface ILogisticCenterService 
     {
-        LogisticCenter FindLogisticCenter();
+        LogisticCenter FindLogisticCenter(Region region);
     }
 }
