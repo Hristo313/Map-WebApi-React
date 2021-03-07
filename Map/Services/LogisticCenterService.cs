@@ -23,9 +23,20 @@ namespace Map.Services
 
         public ICollection<Route> FindRoutes(GetTownsDTO towns)
         {
-            var currentRoutes = _context.Routes
-                .Where(r => towns.Towns.Any(t => t.Name == r.Start.Name || t.Name == r.End.Name))
-                .ToList();
+            //var currentRoutes = _context.Routes
+            //    .Where(route => towns.Any(town => town.Name == route.Start.Name || town.Name == route.End.Name))
+            //    .ToList();
+
+            var allRoutes = _context.Routes.ToList();
+            var currentRoutes = new List<Route>();
+
+            foreach (var route in allRoutes)
+            {
+                if (towns.Towns.Any(t => t.Name == route.Start.Name || t.Name == route.End.Name))
+                {
+                    currentRoutes.Add(route);
+                }
+            }
 
             return currentRoutes;
         }

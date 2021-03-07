@@ -82,13 +82,19 @@ namespace Map.Controllers
         [HttpPost]
         public async Task<ActionResult<GetTownsDTO>> PostLogisticCenter(GetTownsDTO towns)
         {
+            //var townsMap = towns.Towns.Select(t => new Town
+            //{
+            //    Name = t.Name
+            //})
+            //.ToList();
+
             var routes = this.logisticCenterService.FindRoutes(towns);
 
             var region = this.logisticCenterService.MakeRegion(towns, routes);
 
             if (region == null)
             {
-                throw new InvalidOperationException("You already have this logistic center!");
+                throw new InvalidOperationException("You already have this region!");
             }
 
             var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
