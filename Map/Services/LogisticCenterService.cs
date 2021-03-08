@@ -16,18 +16,53 @@ namespace Map.Services
             _context = context;
         }
 
+        public void DFS(int node, int length, int maxLength, string maxLengthTownName, List<Route> allRoutes, Dictionary<int, string> longestRoutes, Boolean[] visited)
+        {
+            visited[node] = true;
+
+            for (int j = 0; j < allRoutes.Count(); j++)
+            {
+                if (!visited[allRoutes[node].End.Id])
+                {
+                    length += allRoutes[node].Length;
+                    DFS(allRoutes[node].End.Id, length, maxLength, maxLengthTownName, allRoutes, longestRoutes, visited);
+                }
+            }
+
+            if (length > maxLength)
+            {
+                maxLength = length;
+                maxLengthTownName = allRoutes[node].End.Name;
+            }
+        }
+
         public LogisticCenter FindLogisticCenter(Region region)
         {
-            var longestRoutes = new Dictionary<string, int>();
+            var longestRoutes = new Dictionary<int, string>();
 
-            //TODO Algorithm...
+            var allTowns = region.Towns.Count();
+            var allRoutes = region.Routes.ToList();
 
+            var visited = new Boolean[allRoutes.Count + 1];
+            var length = 0;
+            var maxLength = int.MinValue;
+            var maxLengthTownName = string.Empty;
 
+            for (int i = 0; i < allTowns; i++)
+            {
+                length = 0;
+                maxLength = int.MinValue;
+                visited = new Boolean[allRoutes.Count + 1];
+
+                if (!visited[i])
+                {
+                    DFS(i, length, maxLength, maxLengthTownName, allRoutes, longestRoutes, visited);
+                    longestRoutes.Add(maxLength, maxLengthTownName);
+                }
+            }
 
             var logisticCenter = new LogisticCenter();
-
-            var shortestRoute = longestRoutes.OrderByDescending(x => x.Value).First().Key;
-
+            var shortestRoute = longestRoutes.OrderByDescending(x => x.Key).First().Value;
             logisticCenter.Name = shortestRoute;
 
             return logisticCenter;
@@ -37,7 +72,7 @@ namespace Map.Services
         {
             var allRoutes = _context.Routes
                 .Select(r => new Route
-                { 
+                {
                     Start = r.Start,
                     End = r.End
                 })
@@ -45,8 +80,8 @@ namespace Map.Services
 
             var currentRoutes = new List<Route>();
 
-            bool isValidStartRoute = false;
-            bool isValidEndRoute = false;
+            var isValidStartRoute = false;
+            var isValidEndRoute = false;
 
             foreach (var route in allRoutes)
             {
@@ -92,19 +127,25 @@ namespace Map.Services
 
             foreach (var town in towns.Towns)
             {
-                townsCollection.Add(_context.Towns.Where(t => t.Name == town.Name).FirstOrDefault());
+                townsCollection
+                    .Add(_context.Towns
+                    .Where(t => t.Name == town.Name)
+                    .FirstOrDefault());
             }
 
             region.Towns = townsCollection;
 
             foreach (var route in routes)
             {
-                routesCollection.Add(_context.Routes.Where(r => r.Start.Name == route.Start.Name && r.End.Name == route.End.Name).FirstOrDefault());
+                routesCollection
+                    .Add(_context.Routes
+                    .Where(r => r.Start.Name == route.Start.Name && r.End.Name == route.End.Name)
+                    .FirstOrDefault());
             }
 
             region.Routes = routesCollection;
 
-            bool passTowns = true;
+            var passTowns = true;
 
             foreach (var reg in _context.Regions.ToList())
             {
@@ -121,7 +162,7 @@ namespace Map.Services
                         passTowns = true;
                         break;
                     }
-                }             
+                }
             }
 
             if (!passTowns)
