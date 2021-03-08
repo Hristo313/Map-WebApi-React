@@ -14,6 +14,7 @@ namespace Map.Models
             this.Routes = new HashSet<Route>();
         }
 
+        [Key]
         public int Id { get; set; }
 
         public virtual ICollection<Town> Towns { get; set; }
