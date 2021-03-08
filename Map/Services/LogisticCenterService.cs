@@ -23,19 +23,50 @@ namespace Map.Services
 
         public ICollection<Route> FindRoutes(GetTownsDTO towns)
         {
-            //var currentRoutes = _context.Routes
-            //    .Where(route => towns.Any(town => town.Name == route.Start.Name || town.Name == route.End.Name))
-            //    .ToList();
+            var allRoutes = _context.Routes
+                .Select(r => new Route
+                { 
+                    Start = r.Start,
+                    End = r.End
+                })
+                .ToList();
 
-            var allRoutes = _context.Routes.ToList();
             var currentRoutes = new List<Route>();
+
+            bool isValidStartRoute = false;
+            bool isValidEndRoute = false;
 
             foreach (var route in allRoutes)
             {
-                if (towns.Towns.Any(t => t.Name == route.Start.Name || t.Name == route.End.Name))
+                foreach (var town in towns.Towns)
                 {
-                    currentRoutes.Add(route);
+                    if (town.Name == route.Start.Name)
+                    {
+                        isValidStartRoute = true;
+                        break;
+                    }
                 }
+
+                if (!isValidStartRoute)
+                {
+                    continue;
+                }
+
+                foreach (var town in towns.Towns)
+                {
+                    if (town.Name == route.End.Name)
+                    {
+                        isValidEndRoute = true;
+                        break;
+                    }
+                }
+
+                if (!isValidEndRoute)
+                {
+                    continue;
+                }
+
+                currentRoutes.Add(route);
             }
 
             return currentRoutes;
@@ -61,7 +92,27 @@ namespace Map.Services
 
             region.Routes = routesCollection;
 
-            if (_context.Regions.Contains(region))
+            bool passTowns = true;
+
+            foreach (var reg in _context.Regions.ToList())
+            {
+                passTowns = false;
+
+                foreach (var town in townsCollection)
+                {
+                    if (reg.Towns.Any(t => t.Name == town.Name))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        passTowns = true;
+                        break;
+                    }
+                }             
+            }
+
+            if (!passTowns)
             {
                 return null;
             }
