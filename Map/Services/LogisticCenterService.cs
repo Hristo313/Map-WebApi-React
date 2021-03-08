@@ -18,7 +18,19 @@ namespace Map.Services
 
         public LogisticCenter FindLogisticCenter(Region region)
         {
-            throw new System.NotImplementedException();
+            var longestRoutes = new Dictionary<string, int>();
+
+            //TODO Algorithm...
+
+
+
+            var logisticCenter = new LogisticCenter();
+
+            var shortestRoute = longestRoutes.OrderByDescending(x => x.Value).First().Key;
+
+            logisticCenter.Name = shortestRoute;
+
+            return logisticCenter;
         }
 
         public ICollection<Route> FindRoutes(GetTownsDTO towns)
