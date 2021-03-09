@@ -43,16 +43,16 @@ namespace Map.Services
             var allTowns = region.Towns.Count();
             var allRoutes = region.Routes.ToList();
 
-            var visited = new Boolean[allRoutes.Count + 1];
-            var length = 0;
-            var maxLength = int.MinValue;
-            var maxLengthTownName = string.Empty;
+            Boolean[] visited = null;
+            int length = 0;
+            int maxLength = int.MinValue;
+            string maxLengthTownName = string.Empty;
 
             for (int i = 0; i < allTowns; i++)
             {
                 length = 0;
                 maxLength = int.MinValue;
-                visited = new Boolean[allRoutes.Count + 1];
+                visited = new Boolean[allTowns + 1];
 
                 if (!visited[i])
                 {
