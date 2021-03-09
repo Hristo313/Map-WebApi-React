@@ -40,7 +40,7 @@ namespace Map.Services
         {
             var longestRoutes = new Dictionary<int, string>();
 
-            var allTowns = region.Towns.Count();
+            int allTowns = region.Towns.Count();
             var allRoutes = region.Routes.ToList();
 
             Boolean[] visited = null;
@@ -62,7 +62,7 @@ namespace Map.Services
             }
 
             var logisticCenter = new LogisticCenter();
-            var shortestRoute = longestRoutes.OrderByDescending(x => x.Key).First().Value;
+            string shortestRoute = longestRoutes.OrderByDescending(x => x.Key).First().Value;
             logisticCenter.Name = shortestRoute;
 
             return logisticCenter;
@@ -80,8 +80,8 @@ namespace Map.Services
 
             var currentRoutes = new List<Route>();
 
-            var isValidStartRoute = false;
-            var isValidEndRoute = false;
+            bool isValidStartRoute = false;
+            bool isValidEndRoute = false;
 
             foreach (var route in allRoutes)
             {
@@ -145,7 +145,7 @@ namespace Map.Services
 
             region.Routes = routesCollection;
 
-            var passTowns = true;
+            bool passTowns = true;
 
             foreach (var reg in _context.Regions.ToList())
             {
