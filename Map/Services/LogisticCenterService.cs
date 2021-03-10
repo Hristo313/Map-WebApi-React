@@ -16,7 +16,7 @@ namespace Map.Services
             _context = context;
         }
 
-        public void DFS(int node, int length, ref int maxLength, ref string maxLengthTownName, List<Route> allRoutes, Dictionary<int, string> longestRoutes, Boolean[] visited)
+        public void DFS(int node, int length, ref int maxLength, ref string maxLengthTownName, List<Route> allRoutes, Boolean[] visited)
         {
             visited[node] = true;
 
@@ -25,7 +25,7 @@ namespace Map.Services
                 if (!visited[allRoutes[node].End.Id])
                 {
                     length += allRoutes[node].Length;
-                    DFS(allRoutes[node].End.Id, length, ref maxLength, ref maxLengthTownName, allRoutes, longestRoutes, visited);
+                    DFS(allRoutes[node].End.Id, length, ref maxLength, ref maxLengthTownName, allRoutes, visited);
                 }
             }
 
@@ -57,7 +57,7 @@ namespace Map.Services
 
                 if (!visited[i])
                 {
-                    DFS(i, length, ref maxLength, ref maxLengthTownName, allRoutes, longestRoutes, visited);
+                    DFS(i, length, ref maxLength, ref maxLengthTownName, allRoutes, visited);
                     longestRoutes.Add(maxLength, maxLengthTownName);
                 }
             }
