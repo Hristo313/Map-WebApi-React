@@ -48,7 +48,7 @@ namespace Map.Services
             int maxLength = int.MinValue;
             string maxLengthTownName = string.Empty;
 
-            for (int i = 0; i < allTowns; i++)
+            for (int i = 1; i <= allTowns; i++)
             {
                 length = 0;
                 maxLength = int.MinValue;
@@ -85,6 +85,9 @@ namespace Map.Services
 
             foreach (var route in allRoutes)
             {
+                isValidStartRoute = false;
+                isValidEndRoute = false;
+
                 foreach (var town in towns.Towns)
                 {
                     if (town.Name == route.Start.Name)
@@ -113,7 +116,10 @@ namespace Map.Services
                     continue;
                 }
 
-                currentRoutes.Add(route);
+                if (isValidStartRoute && isValidEndRoute)
+                {
+                    currentRoutes.Add(route);
+                }                
             }
 
             return currentRoutes;
