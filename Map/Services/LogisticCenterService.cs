@@ -40,15 +40,16 @@ namespace Map.Services
         {
             var longestRoutes = new Dictionary<int, string>();
 
-            int allTowns = region.Towns.Count();
+            int allRegionTowns = region.Towns.Count();
             var allRoutes = region.Routes.ToList();
 
             Boolean[] visited = null;
             int length = 0;
             int maxLength = int.MinValue;
             string maxLengthTownName = string.Empty;
+            int allTowns = _context.Towns.Count();
 
-            for (int i = 1; i <= allTowns; i++)
+            for (int i = 1; i <= allRegionTowns; i++)
             {
                 length = 0;
                 maxLength = int.MinValue;
@@ -171,10 +172,10 @@ namespace Map.Services
                 }
             }
 
-            if (!passTowns)
-            {
-                return null;
-            }
+            //if (!passTowns)
+            //{
+            //    return null;
+            //}
 
             _context.Regions.Add(region);
             _context.SaveChanges();
