@@ -172,10 +172,10 @@ namespace Map.Services
                 }
             }
 
-            //if (!passTowns)
-            //{
-            //    return null;
-            //}
+            if (!passTowns)
+            {
+                return null;
+            }
 
             _context.Regions.Add(region);
             _context.SaveChanges();
