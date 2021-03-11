@@ -22,17 +22,18 @@ namespace Map.Services
 
             for (int j = 0; j < allRoutes.Count(); j++)
             {
-                if (!visited[allRoutes[node].End.Id])
+                if (!visited[allRoutes[j].End.Id])
                 {
-                    length += allRoutes[node].Length;
-                    DFS(allRoutes[node].End.Id, length, ref maxLength, ref maxLengthTownName, allRoutes, visited);
-                }
-            }
+                    length += allRoutes[j].Length;
 
-            if (length > maxLength)
-            {
-                maxLength = length;
-                maxLengthTownName = allRoutes[node].End.Name;
+                    if (length > maxLength)
+                    {
+                        maxLength = length;
+                        maxLengthTownName = allRoutes[j].End.Name;
+                    }
+
+                    DFS(allRoutes[j].End.Id, length, ref maxLength, ref maxLengthTownName, allRoutes, visited);
+                }
             }
         }
 
