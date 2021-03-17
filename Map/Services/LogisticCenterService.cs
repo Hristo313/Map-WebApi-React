@@ -171,11 +171,11 @@ namespace Map.Services
                         break;
                     }
                 }
-            }
 
-            if (!passTowns)
-            {
-                return null;
+                if (!passTowns)
+                {
+                    return null;
+                }
             }
 
             _context.Regions.Add(region);
