@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Map.Data;
 using Map.Models;
+using Map.Services;
 
 namespace Map.Controllers
 {
@@ -14,18 +15,20 @@ namespace Map.Controllers
     [ApiController]
     public class RoutesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
+        private readonly IRouteService routeService;
 
-        public RoutesController(ApplicationDbContext context)
+        public RoutesController(ApplicationDbContext context, IRouteService routeService)
         {
-            _context = context;
+            this.context = context;
+            this.routeService = routeService;
         }
 
         // GET: api/Routes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RouteDTO>>> GetRoutes()
         {
-            var result = await _context.Routes.Select(x => new RouteDTO
+            var result = await this.context.Routes.Select(x => new RouteDTO
             { 
                 Id = x.Id,
                 Start = x.Start.Name,
@@ -40,7 +43,7 @@ namespace Map.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Route>> GetRoute(int id)
         {
-            var route = await _context.Routes.FindAsync(id);
+            var route = await this.context.Routes.FindAsync(id);
 
             if (route == null)
             {
@@ -60,11 +63,11 @@ namespace Map.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(route).State = EntityState.Modified;
+            this.context.Entry(route).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,21 +89,17 @@ namespace Map.Controllers
         [HttpPost("{start}/{end}/{length}")]
         public async Task<ActionResult<Route>> PostRoute(string start, string end, int length)
         {
-            var startTown = _context.Towns.Where(t => start == t.Name).FirstOrDefault();
-            var endTown = _context.Towns.Where(t => end == t.Name).FirstOrDefault();
+            var startTown = this.routeService.GetStartTown(start);
+            var endTown = this.routeService.GetEndTown(end);
 
             if (startTown == null || endTown == null)
             {
                 return NotFound();
             }
 
-            Route route = new Route();
-            route.Start = startTown;
-            route.End = endTown;
-            route.Length = length;
-
-            _context.Routes.Add(route);
-            await _context.SaveChangesAsync();
+            var route = this.routeService.GetRoute(startTown, endTown, length);
+            this.context.Routes.Add(route);
+            await this.context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetRoute), new { id = route.Id }, route);
         }
@@ -109,22 +108,22 @@ namespace Map.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoute(int id)
         {
-            var route = await _context.Routes.FindAsync(id);
+            var route = await this.context.Routes.FindAsync(id);
 
             if (route == null)
             {
                 return NotFound();
             }
 
-            _context.Routes.Remove(route);
-            await _context.SaveChangesAsync();
+            this.context.Routes.Remove(route);
+            await this.context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool RouteExists(int id)
         {
-            return _context.Routes.Any(e => e.Id == id);
+            return this.context.Routes.Any(e => e.Id == id);
         }
     }
 }

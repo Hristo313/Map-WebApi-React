@@ -9,11 +9,11 @@ namespace Map.Services
 {
     public class LogisticCenterService : ILogisticCenterService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public LogisticCenterService(ApplicationDbContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         public void DFS(int node, int length, ref int maxLength, ref string maxLengthTownName, List<Route> allRoutes, Boolean[] visited)
@@ -48,7 +48,7 @@ namespace Map.Services
             int length = 0;
             int maxLength = int.MinValue;
             string maxLengthTownName = string.Empty;
-            int allTowns = _context.Towns.Count();
+            int allTowns = this.context.Towns.Count();
 
             for (int i = 1; i <= allRegionTowns; i++)
             {
@@ -72,7 +72,7 @@ namespace Map.Services
 
         public ICollection<Route> FindRoutes(GetTownsDTO towns)
         {
-            var allRoutes = _context.Routes
+            var allRoutes = this.context.Routes
                 .Select(r => new Route
                 {
                     Start = r.Start,
@@ -136,7 +136,7 @@ namespace Map.Services
             foreach (var town in towns.Towns)
             {
                 townsCollection
-                    .Add(_context.Towns
+                    .Add(this.context.Towns
                     .Where(t => t.Name == town.Name)
                     .FirstOrDefault());
             }
@@ -146,7 +146,7 @@ namespace Map.Services
             foreach (var route in routes)
             {
                 routesCollection
-                    .Add(_context.Routes
+                    .Add(this.context.Routes
                     .Where(r => r.Start.Name == route.Start.Name && r.End.Name == route.End.Name)
                     .FirstOrDefault());
             }
@@ -155,7 +155,7 @@ namespace Map.Services
 
             bool passTowns = true;
 
-            foreach (var reg in _context.Regions.ToList())
+            foreach (var reg in this.context.Regions.ToList())
             {
                 passTowns = false;
 
@@ -178,8 +178,8 @@ namespace Map.Services
                 }
             }
 
-            _context.Regions.Add(region);
-            _context.SaveChanges();
+            this.context.Regions.Add(region);
+            this.context.SaveChanges();
 
             return region;
         }

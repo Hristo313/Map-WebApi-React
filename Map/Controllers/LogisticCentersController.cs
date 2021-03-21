@@ -16,12 +16,12 @@ namespace Map.Controllers
     [ApiController]
     public class LogisticCentersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
         private readonly ILogisticCenterService logisticCenterService;
 
         public LogisticCentersController(ApplicationDbContext context, ILogisticCenterService logisticCenterService)
         {
-            _context = context;
+            this.context = context;
             this.logisticCenterService = logisticCenterService;
         }
 
@@ -29,14 +29,14 @@ namespace Map.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LogisticCenter>>> GetLogisticCenters()
         {
-            return await _context.LogisticCenters.ToListAsync();
+            return await this.context.LogisticCenters.ToListAsync();
         }
 
         // GET: api/LogisticCenters/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LogisticCenter>> GetLogisticCenter(int id)
         {
-            var logisticCenter = await _context.LogisticCenters.FindAsync(id);
+            var logisticCenter = await this.context.LogisticCenters.FindAsync(id);
 
             if (logisticCenter == null)
             {
@@ -56,11 +56,11 @@ namespace Map.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(logisticCenter).State = EntityState.Modified;
+            this.context.Entry(logisticCenter).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -92,8 +92,8 @@ namespace Map.Controllers
 
             var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
 
-            _context.LogisticCenters.Add(logisticCenter);
-            await _context.SaveChangesAsync();
+            this.context.LogisticCenters.Add(logisticCenter);
+            await this.context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);
         }
@@ -102,21 +102,21 @@ namespace Map.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLogisticCenter(int id)
         {
-            var logisticCenter = await _context.LogisticCenters.FindAsync(id);
+            var logisticCenter = await this.context.LogisticCenters.FindAsync(id);
             if (logisticCenter == null)
             {
                 return NotFound();
             }
 
-            _context.LogisticCenters.Remove(logisticCenter);
-            await _context.SaveChangesAsync();
+            this.context.LogisticCenters.Remove(logisticCenter);
+            await this.context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool LogisticCenterExists(int id)
         {
-            return _context.LogisticCenters.Any(e => e.Id == id);
+            return this.context.LogisticCenters.Any(e => e.Id == id);
         }
     }
 }

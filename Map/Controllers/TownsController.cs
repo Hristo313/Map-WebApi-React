@@ -14,25 +14,25 @@ namespace Map.Controllers
     [ApiController]
     public class TownsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public TownsController(ApplicationDbContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: api/Towns
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Town>>> GetTowns()
         {
-            return await _context.Towns.ToListAsync();
+            return await this.context.Towns.ToListAsync();
         }
 
         // GET: api/Towns/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Town>> GetTown(int id)
         {
-            var town = await _context.Towns.FindAsync(id);
+            var town = await this.context.Towns.FindAsync(id);
 
             if (town == null)
             {
@@ -52,11 +52,11 @@ namespace Map.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(town).State = EntityState.Modified;
+            this.context.Entry(town).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +78,8 @@ namespace Map.Controllers
         [HttpPost]
         public async Task<ActionResult<Town>> PostTown(Town town)
         {
-            _context.Towns.Add(town);
-            await _context.SaveChangesAsync();
+            this.context.Towns.Add(town);
+            await this.context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetTown), new { id = town.Id }, town);
         }
@@ -88,21 +88,21 @@ namespace Map.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTown(int id)
         {
-            var town = await _context.Towns.FindAsync(id);
+            var town = await this.context.Towns.FindAsync(id);
             if (town == null)
             {
                 return NotFound();
             }
 
-            _context.Towns.Remove(town);
-            await _context.SaveChangesAsync();
+            this.context.Towns.Remove(town);
+            await this.context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool TownExists(int id)
         {
-            return _context.Towns.Any(e => e.Id == id);
+            return this.context.Towns.Any(e => e.Id == id);
         }
     }
 }

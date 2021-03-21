@@ -44,6 +44,7 @@ namespace Map
             });
 
             services.AddTransient<ILogisticCenterService, LogisticCenterService>();
+            services.AddTransient<IRouteService, RouteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
