@@ -5,6 +5,7 @@ import axios from 'axios';
 export const LogisticCenters = () => {
   const [towns, setTowns] = useState();
   const [selectedTowns, setSelectedTowns] = useState([]);
+  const [logisticCenter, setLogisitcCenter] = useState();
 
   useEffect(() => {
     axios.get('https://localhost:44321/api/Towns')
@@ -14,10 +15,9 @@ export const LogisticCenters = () => {
   }, [setTowns]);
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log(selectedTowns);
-    axios.post('https://localhost:44321/api/LogisticCenters', { Towns: selectedTowns })
-      .then((resposne) => {
-        console.log(resposne.data);
+    axios.post('https://localhost:44321/api/LogisticCenters', { Towns: selectedTowns , LogisticCenter: logisticCenter})
+      .then((response) => {
+             setLogisitcCenter(response.data);
       });
     resetForm({});
   }
@@ -45,6 +45,10 @@ export const LogisticCenters = () => {
        <h2>Region</h2>
        <ul>
           {selectedTowns.map((st, index) => <li key={index}>{ st.Name }</li>)}
+       </ul>
+       <h2>Current Logistic Center</h2>
+       <ul>
+          {logisticCenter && <li>{logisticCenter.name}</li>}
        </ul>
     </div>
   );
