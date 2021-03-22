@@ -26,16 +26,9 @@ namespace Map.Controllers
 
         // GET: api/Routes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RouteDTO>>> GetRoutes()
+        public ActionResult<IEnumerable<RouteDTO>> GetRoutes()
         {
-            var result = await this.context.Routes.Select(x => new RouteDTO
-            { 
-                Id = x.Id,
-                Start = x.Start.Name,
-                End = x.End.Name,
-                Length = x.Length    
-            }).ToListAsync();
-
+            var result = this.routeService.GetRoutes();
             return result;
         }
 
@@ -98,7 +91,7 @@ namespace Map.Controllers
             }
 
             var route = this.routeService.GetRoute(startTown, endTown, length);
-            this.context.Routes.Add(route);
+            await this.context.Routes.AddAsync(route);
             await this.context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetRoute), new { id = route.Id }, route);

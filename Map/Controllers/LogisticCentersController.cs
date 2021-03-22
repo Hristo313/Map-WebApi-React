@@ -92,7 +92,7 @@ namespace Map.Controllers
 
             var logisticCenter = this.logisticCenterService.FindLogisticCenter(region);
 
-            this.context.LogisticCenters.Add(logisticCenter);
+            await this.context.LogisticCenters.AddAsync(logisticCenter);
             await this.context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetLogisticCenter), new { id = logisticCenter.Id }, logisticCenter);

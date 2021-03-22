@@ -1,5 +1,6 @@
 ﻿using Map.Data;
 using Map.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,18 @@ namespace Map.Services
             route.Length = length;
 
             return route;
+        }
+
+        public ActionResult<IEnumerable<RouteDTO>> GetRoutes()
+        {
+            return this.context.Routes.Select(x => new RouteDTO
+            {
+                Id = x.Id,
+                Start = x.Start.Name,
+                End = x.End.Name,
+                Length = x.Length
+            })
+            .ToList();
         }
     }
 }

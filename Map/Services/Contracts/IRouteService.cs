@@ -1,4 +1,5 @@
 ﻿using Map.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace Map.Services
         Town GetEndTown(string end);
 
         Route GetRoute(Town startTown, Town endTown, int length);
+
+        ActionResult<IEnumerable<RouteDTO>> GetRoutes();
     }
 }
