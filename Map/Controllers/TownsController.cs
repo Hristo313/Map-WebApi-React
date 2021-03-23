@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Map.Data;
 using Map.Models;
+using Map.ValidationAttributes;
 
 namespace Map.Controllers
 {

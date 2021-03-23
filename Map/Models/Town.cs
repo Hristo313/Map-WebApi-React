@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Map.Data;
+using Map.ValidationAttributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Map.Models
 {
@@ -8,6 +10,8 @@ namespace Map.Models
         public int Id { get; set; }
 
         [Required]
+        [CapitalLetterAttribute]
+        [AddTownAttribute]
         public string Name { get; set; }
     }
 }

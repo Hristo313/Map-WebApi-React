@@ -5,6 +5,7 @@ import classes from './Towns.module.css';
 
 export const Towns = () => {
   const [towns, setTowns] = useState();
+  const [error, setError] = useState();
 
   useEffect(() => {
     axios.get('https://localhost:44321/api/Towns')
@@ -14,14 +15,15 @@ export const Towns = () => {
   }, [setTowns]);
 
   const handleSubmit = async (values, { resetForm }) => {
-    if (towns.filter(t => t.name === values.Name).length === 0) {
-      await axios.post('https://localhost:44321/api/Towns', { Name: values.Name });
+   // if (towns.filter(t => t.name === values.Name).length === 0) {
+      axios.post('https://localhost:44321/api/Towns', { Name: values.Name })
+      .then().catch(error => {setError(error.response.data.errors.Name[0])});   
       axios.get('https://localhost:44321/api/Towns')
       .then(response => {
         setTowns(response.data);
       });
       resetForm({});
-    }
+  // }
   }
 
   const handleDelete = async (id) => {
@@ -34,7 +36,7 @@ export const Towns = () => {
 
   return (
    <div className={classes.Towns}>
-      <h1>Towns</h1>
+      <h1>Towns</h1>    
       <Formik initialValues={{ Name: '' }} onSubmit={handleSubmit}>
       <Form>
         <div>
@@ -44,6 +46,7 @@ export const Towns = () => {
         <button type="submit">Add Town</button>
       </Form>
       </Formik>
+      {error && <div>{error}</div>}
       <ul>
         {towns && towns.map(t => {
           return <li key={t.id}>{t.name} <button onClick={() => handleDelete(t.id)}>del</button></li>;

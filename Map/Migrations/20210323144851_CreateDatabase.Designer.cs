@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Map.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210308190457_CreateDatabase")]
+    [Migration("20210323144851_CreateDatabase")]
     partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,7 @@ namespace Map.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Length")
+                        .HasMaxLength(5000)
                         .HasColumnType("int");
 
                     b.Property<int?>("RegionId")

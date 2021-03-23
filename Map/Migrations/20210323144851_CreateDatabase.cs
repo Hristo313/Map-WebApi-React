@@ -59,7 +59,7 @@ namespace Map.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartId = table.Column<int>(type: "int", nullable: true),
                     EndId = table.Column<int>(type: "int", nullable: true),
-                    Length = table.Column<int>(type: "int", nullable: false),
+                    Length = table.Column<int>(type: "int", maxLength: 5000, nullable: false),
                     RegionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

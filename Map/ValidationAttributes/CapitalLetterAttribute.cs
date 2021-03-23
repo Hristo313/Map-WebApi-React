@@ -1,5 +1,4 @@
-﻿using Map.Data;
-using Map.Models;
+﻿using Map.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Map.ValidationAttributes
 {
-    public class AddTownAttribute : ValidationAttribute
+    public class CapitalLetterAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var context = (ApplicationDbContext)validationContext.GetService(typeof(ApplicationDbContext));           
+            var town = (Town)validationContext.ObjectInstance;
 
-            if (context.Towns.Any(t => t.Name == (string)value))
+            if (!char.IsUpper(town.Name.First()))
             {
-                return new ValidationResult("You already have " + value);
+                return new ValidationResult("Invalid name");
             }
 
             return ValidationResult.Success;
