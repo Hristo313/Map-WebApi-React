@@ -27,9 +27,8 @@ namespace Map.Controllers
         // GET: api/Routes
         [HttpGet]
         public ActionResult<IEnumerable<RouteDTO>> GetRoutes()
-        {
-            var result = this.routeService.GetRoutes();
-            return result;
+        {          
+            return this.routeService.GetRoutes();
         }
 
         // GET: api/Routes/5
