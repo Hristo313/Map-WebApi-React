@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Map.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Map.DTO
     {
         [Required]
         [MinLength(3)]
+        [AddTownAttribute]
         public string Name { get; set; }
     }
 }
