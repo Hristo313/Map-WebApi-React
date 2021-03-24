@@ -58,7 +58,6 @@ namespace Map.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Length")
-                        .HasMaxLength(5000)
                         .HasColumnType("int");
 
                     b.Property<int?>("RegionId")
