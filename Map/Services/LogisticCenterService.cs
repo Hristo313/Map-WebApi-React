@@ -159,22 +159,25 @@ namespace Map.Services
             {
                 passTowns = false;
 
-                foreach (var town in townsCollection)
+                if (reg.Towns.Count == townsCollection.Count)
                 {
-                    if (reg.Towns.Any(t => t.Name == town.Name))
+                    foreach (var town in townsCollection)
                     {
-                        continue;
+                        if (reg.Towns.Any(t => t.Name == town.Name))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            passTowns = true;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        passTowns = true;
-                        break;
-                    }
-                }
 
-                if (!passTowns)
-                {
-                    return null;
+                    if (!passTowns)
+                    {
+                        return null;
+                    }
                 }
             }
 
