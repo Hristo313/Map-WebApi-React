@@ -8,30 +8,21 @@ export const Towns = () => {
   const [error, setError] = useState();
 
   useEffect(() => {
-    axios.get('https://localhost:44321/api/Towns')
-      .then(response => {
-        setTowns(response.data);
-      });
+    axios.get('https://localhost:44321/api/Towns').then(response => {setTowns(response.data)});
   }, [setTowns]);
 
   const handleSubmit = async (values, { resetForm }) => {
    // if (towns.filter(t => t.name === values.Name).length === 0) {
-      axios.post('https://localhost:44321/api/Towns', { Name: values.Name })
-      .then().catch(error => {setError(error.response.data.errors.Name[0])});   
-      axios.get('https://localhost:44321/api/Towns')
-      .then(response => {
-        setTowns(response.data);
-      });
+      await axios.post('https://localhost:44321/api/Towns', { Name: values.Name })
+      .then().catch(error => {setError(error.response.data.errors.Name[0])});
+      axios.get('https://localhost:44321/api/Towns').then(response => {setTowns(response.data)});
       resetForm({});
   // }
   }
 
   const handleDelete = async (id) => {
     await axios.delete(`https://localhost:44321/api/Towns/${id}`);
-    axios.get('https://localhost:44321/api/Towns')
-      .then(response => {
-        setTowns(response.data);
-      });
+    axios.get('https://localhost:44321/api/Towns').then(response => {setTowns(response.data)});
   }
 
   return (

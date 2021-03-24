@@ -8,17 +8,12 @@ export const LogisticCenters = () => {
   const [logisticCenter, setLogisitcCenter] = useState();
 
   useEffect(() => {
-    axios.get('https://localhost:44321/api/Towns')
-      .then(response => {
-        setTowns(response.data);
-      });
+    axios.get('https://localhost:44321/api/Towns').then(response => {setTowns(response.data)});
   }, [setTowns]);
 
   const handleSubmit = (values, { resetForm }) => {
     axios.post('https://localhost:44321/api/LogisticCenters', { Towns: selectedTowns , LogisticCenter: logisticCenter})
-      .then((response) => {
-             setLogisitcCenter(response.data);
-      });
+      .then((response) => {setLogisitcCenter(response.data)});
     resetForm({});
   }
 

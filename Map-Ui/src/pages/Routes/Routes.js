@@ -7,12 +7,8 @@ export const Routes = () => {
   const [routes, setRoutes] = useState();
 
   useEffect(() => {
-    axios.get('https://localhost:44321/api/Towns')
-      .then(response => {
-        setTowns(response.data);
-      });
-    axios.get('https://localhost:44321/api/Routes')
-    .then(response => setRoutes(response.data));
+    axios.get('https://localhost:44321/api/Towns').then(response => {setTowns(response.data)});
+    axios.get('https://localhost:44321/api/Routes').then(response => setRoutes(response.data));
   }, [setTowns, setRoutes]);
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -54,7 +50,7 @@ export const Routes = () => {
             </div>
             <div>
               <label>Length</label>
-              <Field type="number" name="Length" min="1" />
+              <Field type="number" name="Length" min="10" max="5000"/>
             </div>
             <button type="submit">Add Route</button>
           </Form>
