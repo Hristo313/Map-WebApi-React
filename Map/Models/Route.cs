@@ -17,7 +17,6 @@ namespace Map.Models
         public virtual Town End { get; set; }
 
         [Required]
-        [StringLength(5000, MinimumLength = 10)]
         public int Length { get; set; }
 
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
